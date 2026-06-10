@@ -7,17 +7,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #4F46E5;
-            --primary-light: #818CF8;
-            --secondary: #10B981;
-            --danger: #EF4444;
-            --warning: #F59E0B;
-            --bg-color: #0f172a;
-            --surface: rgba(30, 41, 59, 0.7);
-            --surface-solid: #1e293b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border: rgba(255, 255, 255, 0.1);
+            --primary: #9b72cb; /* Gemini Purple */
+            --primary-light: #cfa8ff;
+            --secondary: #4285f4; /* Gemini Blue */
+            --danger: #d96570; /* Gemini Red/Pink */
+            --warning: #f4b400; /* Gemini Yellow */
+            --bg-color: #000000;
+            --surface: rgba(20, 20, 25, 0.6);
+            --surface-hover: rgba(40, 40, 50, 0.8);
+            --text-main: #ffffff;
+            --text-muted: #a0a0b0;
+            --border: rgba(255, 255, 255, 0.08);
+            --glass-blur: blur(24px);
         }
 
         * {
@@ -31,91 +32,141 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            overflow: hidden; /* Prevent body scroll, manage in containers */
+            overflow: hidden; 
             height: 100vh;
             width: 100vw;
             display: flex;
             justify-content: center;
+            align-items: center;
         }
 
-        /* Animated Background */
-        .bg-animation {
+        /* --- Gemini-Style Animated Glowing Background --- */
+        .glow-container {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background: linear-gradient(45deg, #0f172a, #1e1b4b, #0f172a);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            overflow: hidden;
             z-index: -1;
+            background: #08080a;
+        }
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.5;
+            animation: float 15s infinite ease-in-out alternate;
+        }
+        .orb-1 {
+            width: 50vw; height: 50vw;
+            background: #4285f4; /* Blue */
+            top: -10%; left: -10%;
+            animation-delay: 0s;
+        }
+        .orb-2 {
+            width: 60vw; height: 60vw;
+            background: #9b72cb; /* Purple */
+            bottom: -20%; right: -10%;
+            animation-delay: -5s;
+        }
+        .orb-3 {
+            width: 40vw; height: 40vw;
+            background: #d96570; /* Pink */
+            top: 40%; left: 40%;
+            animation-delay: -10s;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(5%, 10%) scale(1.1); }
+            100% { transform: translate(-5%, -5%) scale(0.9); }
         }
 
         /* App Container */
         #app {
             width: 100%;
-            max-width: 480px; /* Mobile app constraint on desktop */
+            max-width: 480px; 
             height: 100%;
+            max-height: 100vh;
             display: flex;
             flex-direction: column;
             position: relative;
-            background: rgba(15, 23, 42, 0.4);
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            background: transparent;
+        }
+
+        /* Desktop specific styles for the app container */
+        @media (min-width: 481px) {
+            #app {
+                height: 90vh;
+                border-radius: 32px;
+                border: 1px solid var(--border);
+                box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+                overflow: hidden;
+                background: rgba(10, 10, 15, 0.4);
+                backdrop-filter: var(--glass-blur);
+                -webkit-backdrop-filter: var(--glass-blur);
+            }
         }
 
         /* Header */
         header {
-            padding: 20px 20px 10px 20px;
+            padding: 30px 24px 15px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border);
             z-index: 10;
         }
 
-        .greeting h1 { font-size: 1.5rem; font-weight: 600; }
-        .greeting p { font-size: 0.85rem; color: var(--primary-light); }
+        .gemini-text {
+            background: linear-gradient(90deg, #cfa8ff, #4285f4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 600;
+        }
+
+        .greeting h1 { font-size: 1.8rem; letter-spacing: -0.5px; }
+        .greeting p { font-size: 0.85rem; color: var(--text-muted); margin-top: 2px; }
+        
         .day-badge {
-            background: var(--primary);
-            padding: 5px 12px;
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 24px;
             font-size: 0.85rem;
             font-weight: 600;
-            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.4);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         /* Views (Tabs) */
         .view {
             flex: 1;
             overflow-y: auto;
-            padding: 20px;
+            padding: 10px 24px;
             display: none;
-            animation: fadeIn 0.3s ease;
-            padding-bottom: 90px; /* Space for nav */
+            animation: fadeIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            padding-bottom: 120px; /* Space for floating nav */
+            scrollbar-width: none; /* Firefox */
         }
+        .view::-webkit-scrollbar { display: none; } /* Chrome */
         .view.active { display: block; }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Cards */
+        /* Glass Cards */
         .card {
             background: var(--surface);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            transition: transform 0.2s;
+            border-radius: 28px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease, background 0.3s ease;
         }
 
         /* Progress Circle */
@@ -123,19 +174,19 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 20px 0;
+            margin: 25px 0;
             position: relative;
         }
         
-        .progress-ring { width: 180px; height: 180px; }
+        .progress-ring { width: 220px; height: 220px; filter: drop-shadow(0 0 10px rgba(155, 114, 203, 0.3)); }
         .progress-ring__circle-bg {
-            fill: transparent; stroke: rgba(255,255,255,0.05); stroke-width: 8;
+            fill: transparent; stroke: rgba(255,255,255,0.05); stroke-width: 6;
         }
         .progress-ring__circle {
-            fill: transparent; stroke: var(--primary-light); stroke-width: 8;
-            stroke-dasharray: 502; stroke-dashoffset: 502;
+            fill: transparent; stroke: url(#gradient); stroke-width: 8;
+            stroke-dasharray: 660; stroke-dashoffset: 660;
             stroke-linecap: round;
-            transition: stroke-dashoffset 1s linear, stroke 0.3s;
+            transition: stroke-dashoffset 1s linear;
             transform: rotate(-90deg);
             transform-origin: 50% 50%;
         }
@@ -144,130 +195,151 @@
             position: absolute;
             text-align: center;
         }
-        .progress-text .time-left { font-size: 2.2rem; font-weight: 700; line-height: 1; }
-        .progress-text .label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .progress-text .time-left { font-size: 2.8rem; font-weight: 300; line-height: 1; letter-spacing: -1px; }
+        .progress-text .label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; }
 
         /* Status Details */
         .status-header {
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
+            display: flex; justify-content: center; align-items: center; margin-bottom: 15px;
         }
         .status-badge {
-            background: rgba(16, 185, 129, 0.2); color: var(--secondary);
-            padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 600;
+            background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border); color: var(--text-main);
+            padding: 6px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.5px;
         }
-        .class-title { font-size: 1.4rem; font-weight: 600; margin-bottom: 5px; }
-        .class-meta { display: flex; gap: 15px; font-size: 0.85rem; color: var(--text-muted); }
-        .class-meta span { display: flex; align-items: center; gap: 5px; }
+        .status-badge.active-indicator { color: #cfa8ff; border-color: rgba(207, 168, 255, 0.3); background: rgba(207, 168, 255, 0.1); }
+        
+        .class-title { font-size: 1.6rem; font-weight: 600; margin-bottom: 8px; }
+        .class-meta { display: flex; gap: 20px; font-size: 0.9rem; color: var(--text-muted); }
+        .class-meta span { display: flex; align-items: center; gap: 6px; }
 
         /* Schedule List */
-        .schedule-list { display: flex; flex-direction: column; gap: 10px; }
+        .schedule-list { display: flex; flex-direction: column; gap: 12px; }
         .schedule-item {
             display: flex;
             background: var(--surface);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 12px;
+            border-radius: 20px;
+            padding: 16px;
             align-items: center;
-            transition: 0.2s;
+            transition: 0.3s;
         }
         .schedule-item.active-now {
-            border-color: var(--primary);
-            background: rgba(79, 70, 229, 0.1);
+            border-color: rgba(155, 114, 203, 0.5);
+            background: linear-gradient(135deg, rgba(155, 114, 203, 0.15), rgba(66, 133, 244, 0.05));
             transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
-        .schedule-item.is-break { background: rgba(255, 255, 255, 0.02); }
+        .schedule-item.is-break { background: rgba(255, 255, 255, 0.03); }
         
-        .s-time { width: 65px; font-size: 0.75rem; color: var(--text-muted); text-align: right; padding-right: 15px; border-right: 1px solid var(--border); }
+        .s-time { width: 75px; font-size: 0.8rem; color: var(--text-muted); text-align: right; padding-right: 15px; border-right: 1px solid rgba(255,255,255,0.1); font-weight: 500; }
         .s-details { padding-left: 15px; flex: 1; }
-        .s-name { font-weight: 600; font-size: 1rem; }
-        .s-meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+        .s-name { font-weight: 600; font-size: 1.05rem; }
+        .s-meta { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
 
         /* Day Selector */
         .day-selector {
-            display: flex; overflow-x: auto; gap: 10px; padding-bottom: 10px; margin-bottom: 15px;
+            display: flex; overflow-x: auto; gap: 12px; padding-bottom: 15px; margin-bottom: 10px;
             scrollbar-width: none;
         }
         .day-selector::-webkit-scrollbar { display: none; }
         .day-btn {
-            background: var(--surface); color: var(--text-main);
-            border: 1px solid var(--border); padding: 8px 16px;
-            border-radius: 20px; font-size: 0.9rem; cursor: pointer; white-space: nowrap;
-            transition: 0.2s;
+            background: rgba(255,255,255,0.05); color: var(--text-muted);
+            border: 1px solid var(--border); padding: 10px 20px;
+            border-radius: 24px; font-size: 0.95rem; cursor: pointer; white-space: nowrap;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
-        .day-btn.active { background: var(--primary); border-color: var(--primary); font-weight: 600; }
+        .day-btn.active { 
+            background: #fff; color: #000; border-color: #fff; font-weight: 600; 
+            box-shadow: 0 4px 15px rgba(255,255,255,0.2);
+        }
 
         /* Game UI */
         #game-container {
             display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;
         }
         #snake-canvas {
-            background: rgba(0,0,0,0.3); border: 2px solid var(--border); border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5); max-width: 100%;
+            background: rgba(0,0,0,0.5); border: 1px solid var(--border); border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); max-width: 100%; margin-top: 10px;
+            backdrop-filter: blur(10px);
         }
-        .game-hud { display: flex; justify-content: space-between; width: 100%; padding: 0 10px 10px 10px; font-weight: 600; }
+        .game-hud { display: flex; justify-content: space-between; width: 100%; padding: 0 10px 10px 10px; font-weight: 500; color: var(--text-muted); }
+        .game-hud span span { color: #fff; font-weight: 600; font-size: 1.1rem; }
+        
         .btn {
-            background: var(--primary); color: white; border: none; padding: 12px 24px;
-            border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 20px;
-            width: 100%; transition: 0.2s;
+            background: #fff; color: #000; border: none; padding: 14px 28px;
+            border-radius: 24px; font-size: 1.05rem; font-weight: 600; cursor: pointer; margin-top: 30px;
+            width: 100%; transition: 0.2s; box-shadow: 0 4px 15px rgba(255,255,255,0.2);
         }
-        .btn:active { transform: scale(0.95); }
+        .btn:active { transform: scale(0.96); }
         
         .d-pad {
-            display: grid; grid-template-columns: repeat(3, 60px); grid-gap: 10px; margin-top: 20px; justify-content: center;
+            display: grid; grid-template-columns: repeat(3, 65px); grid-gap: 12px; margin-top: 30px; justify-content: center;
         }
         .d-btn {
-            width: 60px; height: 60px; background: rgba(255,255,255,0.1); border-radius: 12px;
-            display: flex; justify-content: center; align-items: center; font-size: 1.5rem; border: 1px solid var(--border);
-            user-select: none;
+            width: 65px; height: 65px; background: rgba(255,255,255,0.08); border-radius: 20px;
+            display: flex; justify-content: center; align-items: center; font-size: 1.6rem; border: 1px solid var(--border);
+            user-select: none; transition: 0.1s; backdrop-filter: blur(5px);
         }
-        .d-btn:active { background: rgba(255,255,255,0.2); }
+        .d-btn:active { background: rgba(255,255,255,0.2); transform: scale(0.95); }
         .d-up { grid-column: 2; }
         .d-left { grid-column: 1; grid-row: 2; }
         .d-right { grid-column: 3; grid-row: 2; }
         .d-down { grid-column: 2; grid-row: 2; }
 
         /* Settings UI */
-        .setting-group { margin-bottom: 20px; }
-        .setting-group label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 0.85rem; }
-        select {
-            width: 100%; padding: 12px; background: rgba(0,0,0,0.2); border: 1px solid var(--border);
-            color: white; border-radius: 8px; outline: none; font-family: 'Poppins', sans-serif;
+        .setting-group { margin-bottom: 25px; }
+        .setting-group label { display: block; margin-bottom: 10px; color: var(--text-muted); font-size: 0.9rem; margin-left: 5px;}
+        select, input[type="time"] {
+            width: 100%; padding: 15px; background: rgba(0,0,0,0.3); border: 1px solid var(--border);
+            color: white; border-radius: 16px; outline: none; font-family: 'Poppins', sans-serif;
+            font-size: 1rem; transition: 0.3s;
         }
-        option { background: var(--surface-solid); }
+        select:focus, input[type="time"]:focus { border-color: var(--primary-light); background: rgba(0,0,0,0.5); }
+        option { background: #1a1a24; }
 
-        /* Bottom Nav */
+        /* Floating Pill Bottom Nav */
         nav {
-            position: absolute; bottom: 0; left: 0; width: 100%;
-            background: var(--surface-solid);
-            border-top: 1px solid var(--border);
-            display: flex; justify-content: space-around;
-            padding: 15px 10px 25px 10px; /* Extra bottom padding for iPhone indicator */
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+            width: calc(100% - 48px); max-width: 400px;
+            background: rgba(20, 20, 25, 0.75);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 30px;
+            display: flex; justify-content: space-around; align-items: center;
+            padding: 12px 10px;
             z-index: 100;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
         .nav-item {
             display: flex; flex-direction: column; align-items: center; gap: 4px;
             color: var(--text-muted); cursor: pointer; text-decoration: none;
-            transition: 0.3s; width: 60px;
+            transition: all 0.3s ease; width: 70px; padding: 6px 0; border-radius: 20px;
         }
-        .nav-item svg { width: 24px; height: 24px; fill: currentColor; transition: 0.3s; }
-        .nav-item span { font-size: 0.7rem; font-weight: 500; }
-        .nav-item.active { color: var(--primary-light); }
-        .nav-item.active svg { transform: translateY(-3px); }
+        .nav-item svg { width: 22px; height: 22px; fill: currentColor; transition: 0.3s; }
+        .nav-item span { font-size: 0.7rem; font-weight: 500; opacity: 0; transform: translateY(5px); transition: 0.3s; position: absolute; bottom: 2px;}
+        .nav-item.active { color: #fff; background: rgba(255,255,255,0.1); padding-bottom: 20px; }
+        .nav-item.active svg { transform: translateY(-8px); }
+        .nav-item.active span { opacity: 1; transform: translateY(0); }
 
         /* Toast Notifications */
         #toast-container {
-            position: absolute; top: 80px; left: 50%; transform: translateX(-50%);
+            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
             width: 90%; max-width: 400px; z-index: 1000;
             display: flex; flex-direction: column; gap: 10px; pointer-events: none;
         }
         .toast {
-            background: rgba(16, 185, 129, 0.9); backdrop-filter: blur(10px); color: white;
-            padding: 12px 20px; border-radius: 12px; font-size: 0.9rem; font-weight: 500;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            animation: slideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            background: rgba(20, 20, 25, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            color: white; border: 1px solid rgba(255,255,255,0.1);
+            padding: 16px 24px; border-radius: 20px; font-size: 0.95rem; font-weight: 500;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: slideDown 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            display: flex; align-items: center; gap: 10px;
         }
         @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-20px); }
+            from { opacity: 0; transform: translateY(-30px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .toast.fade-out { animation: fadeOut 0.4s ease forwards; }
@@ -277,14 +349,19 @@
 </head>
 <body>
 
-<div class="bg-animation"></div>
+<!-- Animated Glowing Orbs Background -->
+<div class="glow-container">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+</div>
 
 <div id="app">
     <div id="toast-container"></div>
 
     <header>
         <div class="greeting">
-            <h1 id="greeting-text">Good Morning</h1>
+            <h1 class="gemini-text" id="greeting-text">Good Morning</h1>
             <p id="date-display">Loading date...</p>
         </div>
         <div class="day-badge" id="current-day-badge">Day 1</div>
@@ -293,15 +370,22 @@
     <!-- HOME DASHBOARD -->
     <main id="view-home" class="view active">
         
-        <div class="card" style="text-align: center; border-color: rgba(79, 70, 229, 0.3);">
-            <div class="status-header" style="justify-content: center;">
+        <div class="card" style="text-align: center;">
+            <div class="status-header">
                 <span class="status-badge" id="status-indicator">● Active</span>
             </div>
             
             <div class="progress-container">
                 <svg class="progress-ring">
-                    <circle class="progress-ring__circle-bg" cx="90" cy="90" r="80"></circle>
-                    <circle class="progress-ring__circle" id="progress-circle" cx="90" cy="90" r="80"></circle>
+                    <defs>
+                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#4285f4" />
+                            <stop offset="50%" stop-color="#9b72cb" />
+                            <stop offset="100%" stop-color="#d96570" />
+                        </linearGradient>
+                    </defs>
+                    <circle class="progress-ring__circle-bg" cx="110" cy="110" r="100"></circle>
+                    <circle class="progress-ring__circle" id="progress-circle" cx="110" cy="110" r="100"></circle>
                 </svg>
                 <div class="progress-text">
                     <div class="time-left" id="time-left-val">--:--</div>
@@ -309,32 +393,34 @@
                 </div>
             </div>
 
-            <h2 class="class-title" id="current-subject">Loading...</h2>
+            <h2 class="class-title gemini-text" id="current-subject" style="background: #fff; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Loading...</h2>
             <div class="class-meta" style="justify-content: center;" id="current-meta">
                 <span>📍 <span id="current-room">--</span></span>
                 <span>👨‍🏫 <span id="current-teacher">--</span></span>
             </div>
         </div>
 
-        <div class="card">
-            <h3 style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase;">Up Next</h3>
-            <div id="next-class-container">
-                <div class="class-title" id="next-subject" style="font-size: 1.1rem;">--</div>
-                <div class="class-meta" id="next-meta">
+        <div class="card" style="padding: 20px 24px;">
+            <h3 style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;">Up Next</h3>
+            <div id="next-class-container" style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="class-title" id="next-subject" style="font-size: 1.15rem; margin:0;">--</div>
+                <div class="class-meta" id="next-meta" style="gap: 10px; font-size: 0.8rem;">
                     <span>⏱️ <span id="next-time">--:--</span></span>
                     <span>📍 <span id="next-room">--</span></span>
                 </div>
             </div>
         </div>
         
-        <div class="card">
-            <h3 style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px;">Daily Progress</h3>
-            <div style="width: 100%; background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px; overflow: hidden;">
-                <div id="daily-progress-bar" style="width: 0%; height: 100%; background: var(--secondary); transition: width 1s ease;"></div>
+        <div class="card" style="padding: 20px 24px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                <h3 style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Daily Progress</h3>
+                <span id="daily-progress-text" style="font-size: 0.8rem; font-weight: 600;">0%</span>
             </div>
-            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-top: 5px;">
+            <div style="width: 100%; background: rgba(255,255,255,0.08); height: 6px; border-radius: 6px; overflow: hidden;">
+                <div id="daily-progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #4285f4, #9b72cb); transition: width 1s cubic-bezier(0.2, 0.8, 0.2, 1);"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted); margin-top: 8px;">
                 <span>7:45 AM</span>
-                <span id="daily-progress-text">0%</span>
                 <span>3:20 PM</span>
             </div>
         </div>
@@ -343,7 +429,7 @@
 
     <!-- FULL SCHEDULE -->
     <main id="view-schedule" class="view">
-        <h2 style="margin-bottom: 15px; font-weight: 600;">Timetable</h2>
+        <h2 style="margin-bottom: 20px; font-weight: 600; font-size: 1.8rem; letter-spacing: -0.5px;">Timetable</h2>
         
         <div class="day-selector" id="day-selector">
             <!-- Populated via JS -->
@@ -357,23 +443,31 @@
     <!-- GAME (SNAKE) -->
     <main id="view-game" class="view">
         <div id="game-container">
-            <div style="text-align: center; margin-bottom: 15px;">
-                <h2 style="color: var(--primary-light);">Study Break Snake</h2>
-                <p style="font-size: 0.8rem; color: var(--text-muted);" id="game-warning">Perfect for breaks!</p>
+            <div style="text-align: center; margin-bottom: 10px; width: 100%;">
+                <h2 class="gemini-text" style="font-size: 1.8rem; margin-bottom: 4px;">Snake Break</h2>
+                <p style="font-size: 0.85rem; color: var(--text-muted);" id="game-warning">Perfect for breaks!</p>
             </div>
             
             <div class="game-hud">
                 <span>Score: <span id="score">0</span></span>
-                <span>High: <span id="high-score">0</span></span>
+                <span>Best: <span id="high-score">0</span></span>
             </div>
             
             <canvas id="snake-canvas" width="300" height="300"></canvas>
             
             <div class="d-pad">
-                <div class="d-btn d-up" onclick="snakeGame.setDir(0, -1)">⬆️</div>
-                <div class="d-btn d-left" onclick="snakeGame.setDir(-1, 0)">⬅️</div>
-                <div class="d-btn d-down" onclick="snakeGame.setDir(0, 1)">⬇️</div>
-                <div class="d-btn d-right" onclick="snakeGame.setDir(1, 0)">➡️</div>
+                <div class="d-btn d-up" onclick="snakeGame.setDir(0, -1)">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+                </div>
+                <div class="d-btn d-left" onclick="snakeGame.setDir(-1, 0)">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </div>
+                <div class="d-btn d-down" onclick="snakeGame.setDir(0, 1)">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+                </div>
+                <div class="d-btn d-right" onclick="snakeGame.setDir(1, 0)">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </div>
             </div>
 
             <button class="btn" id="start-btn" onclick="snakeGame.start()">Start Game</button>
@@ -382,9 +476,9 @@
 
     <!-- SETTINGS -->
     <main id="view-settings" class="view">
+        <h2 style="margin-bottom: 20px; font-weight: 600; font-size: 1.8rem; letter-spacing: -0.5px;">Settings</h2>
+        
         <div class="card">
-            <h2 style="margin-bottom: 20px;">Settings</h2>
-            
             <div class="setting-group">
                 <label for="set-day">Current Cycle Day</label>
                 <select id="set-day" onchange="app.setDay(this.value)">
@@ -396,24 +490,24 @@
                     <option value="6">Day 6</option>
                     <option value="7">Day 7</option>
                 </select>
-                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 5px;">
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px; margin-left: 5px;">
                     Changes automatically at midnight on weekdays.
                 </p>
             </div>
 
-            <div class="setting-group">
+            <div class="setting-group" style="margin-bottom: 10px;">
                 <label for="dev-time">Time Travel (For Testing)</label>
-                <input type="time" id="dev-time" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); color: white; border-radius: 8px;" onchange="app.setDevTime(this.value)">
-                <button class="btn" style="padding: 8px; margin-top: 5px; background: rgba(255,255,255,0.1);" onclick="app.setDevTime(null)">Reset to Real Time</button>
+                <input type="time" id="dev-time" onchange="app.setDevTime(this.value)">
+                <button class="btn" style="padding: 12px; margin-top: 15px; background: rgba(255,255,255,0.1); color: #fff; font-size: 0.95rem; box-shadow: none;" onclick="app.setDevTime(null)">Reset to Real Time</button>
             </div>
         </div>
         
-        <div style="text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 30px;">
-            Class 2C Hub v1.0<br>Toledo Community College
+        <div style="text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 40px; opacity: 0.7;">
+            Class 2C Hub v2.0<br>Toledo Community College
         </div>
     </main>
 
-    <!-- BOTTOM NAV -->
+    <!-- FLOATING BOTTOM NAV -->
     <nav>
         <div class="nav-item active" onclick="app.switchTab('home', this)">
             <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
@@ -485,11 +579,10 @@
     // --- MAIN APP LOGIC ---
     const app = {
         currentDay: 1,
-        devTimeMinutes: null, // For testing
+        devTimeMinutes: null, 
         lastNotifiedSlot: null,
         
         init() {
-            // Load saved day
             let savedDay = localStorage.getItem('schoolDayCycle');
             let lastDate = localStorage.getItem('lastDateTracked');
             let todayDate = new Date().toDateString();
@@ -498,10 +591,9 @@
                 this.currentDay = parseInt(savedDay);
             }
 
-            // Auto advance day if a new weekday has started
             if (lastDate && lastDate !== todayDate) {
                 let dayOfWeek = new Date().getDay();
-                if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Not weekend
+                if (dayOfWeek !== 0 && dayOfWeek !== 6) { 
                     this.currentDay = this.currentDay < 7 ? this.currentDay + 1 : 1;
                 }
             }
@@ -513,7 +605,6 @@
             this.updateGreeting();
             this.renderScheduleTabs();
             
-            // Start Loop
             setInterval(() => this.tick(), 1000);
             this.tick();
         },
@@ -542,6 +633,7 @@
         setDevTime(timeStr) {
             if(!timeStr) {
                 this.devTimeMinutes = null;
+                document.getElementById('dev-time').value = "";
             } else {
                 this.devTimeMinutes = parseTime(timeStr);
             }
@@ -561,7 +653,7 @@
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = 'toast';
-            toast.innerHTML = `🔔 ${msg}`;
+            toast.innerHTML = `<span style="font-size: 1.2rem;">✨</span> ${msg}`;
             container.appendChild(toast);
             
             setTimeout(() => {
@@ -579,17 +671,16 @@
             let dayOfWeek = now.getDay();
             let isWeekend = (dayOfWeek === 0 || dayOfWeek === 6) && this.devTimeMinutes === null;
 
-            const startOfDay = 465; // 7:45
-            const endOfDay = 920;   // 15:20
+            const startOfDay = 465; 
+            const endOfDay = 920;   
             
-            // UI Elements to update
             const elSubject = document.getElementById('current-subject');
             const elRoom = document.getElementById('current-room');
             const elTeacher = document.getElementById('current-teacher');
             const elTimeLeft = document.getElementById('time-left-val');
             const elCircle = document.getElementById('progress-circle');
             const elIndicator = document.getElementById('status-indicator');
-            const circleCircumference = 502;
+            const circleCircumference = 660; // updated for larger radius
 
             if (isWeekend) {
                 elSubject.innerText = "Weekend! 🎉";
@@ -597,21 +688,18 @@
                 elTimeLeft.innerText = "CHILL";
                 elCircle.style.strokeDashoffset = 0;
                 elIndicator.innerText = "● Offline";
-                elIndicator.style.background = "rgba(148, 163, 184, 0.2)";
-                elIndicator.style.color = "#94a3b8";
+                elIndicator.className = "status-badge";
                 document.getElementById('daily-progress-bar').style.width = '0%';
                 document.getElementById('next-subject').innerText = "Enjoy your break!";
                 return;
             }
 
-            // Daily Progress
             let dayProg = 0;
             if (currentMins >= endOfDay) dayProg = 100;
             else if (currentMins > startOfDay) dayProg = ((timeExact - startOfDay) / (endOfDay - startOfDay)) * 100;
             document.getElementById('daily-progress-bar').style.width = `${dayProg}%`;
             document.getElementById('daily-progress-text').innerText = `${Math.floor(dayProg)}%`;
 
-            // Find current slot
             let activeSlot = null;
             let nextSlot = null;
 
@@ -624,7 +712,6 @@
                     nextSlot = i + 1 < slots.length ? slots[i+1] : null;
                     break;
                 } else if (currentMins < slotStart && !activeSlot) {
-                    // Before school or in between (if gaps existed)
                     nextSlot = slots[i];
                     break;
                 }
@@ -636,6 +723,7 @@
                 elTimeLeft.innerText = "DONE";
                 elCircle.style.strokeDashoffset = 0;
                 elIndicator.innerText = "● Finished";
+                elIndicator.className = "status-badge";
                 document.getElementById('next-subject').innerText = "See you tomorrow!";
                 document.getElementById('next-meta').innerHTML = "";
                 return;
@@ -646,7 +734,7 @@
                 let nextStart = parseTime(nextSlot.start);
                 let waitSecs = (nextStart - timeExact) * 60;
                 elTimeLeft.innerText = timeString(waitSecs);
-                elCircle.style.strokeDashoffset = circleCircumference; // empty
+                elCircle.style.strokeDashoffset = circleCircumference; 
                 elRoom.innerText = "--"; elTeacher.innerText = "--";
             } 
             else if (activeSlot) {
@@ -662,11 +750,10 @@
                 elCircle.style.strokeDashoffset = circleCircumference - (percent * circleCircumference);
 
                 if (activeSlot.type === 'break') {
-                    elSubject.innerText = activeSlot.name + " ☕";
+                    elSubject.innerText = activeSlot.name;
                     elRoom.innerText = "Anywhere"; elTeacher.innerText = "--";
                     elIndicator.innerText = "● Break";
-                    elIndicator.style.color = varWarning;
-                    elCircle.style.stroke = varWarning;
+                    elIndicator.className = "status-badge";
                     document.getElementById('game-warning').innerText = "Perfect time for a game!";
                 } else {
                     let classData = timetable[this.currentDay][activeSlot.id];
@@ -674,19 +761,16 @@
                     elRoom.innerText = classData ? classData.r : "--";
                     elTeacher.innerText = classData && classData.t ? classData.t : "--";
                     elIndicator.innerText = "● Active Class";
-                    elIndicator.style.color = varSecondary;
-                    elCircle.style.stroke = varPrimaryLight;
+                    elIndicator.className = "status-badge active-indicator";
                     document.getElementById('game-warning').innerText = "Psst! You should be paying attention in class!";
                 }
 
-                // TOAST LOGIC (5 mins before end)
                 if (remainSecs <= 300 && remainSecs > 299 && this.lastNotifiedSlot !== activeSlot.id) {
                     this.showToast(`5 minutes left in ${activeSlot.name}!`);
                     this.lastNotifiedSlot = activeSlot.id;
                 }
             }
 
-            // Update Next Class Info
             if (nextSlot) {
                 let nData = nextSlot.type === 'class' ? timetable[this.currentDay][nextSlot.id] : null;
                 document.getElementById('next-subject').innerText = nData ? nData.s : nextSlot.name;
@@ -724,7 +808,6 @@
                 let isBreak = slot.type === 'break';
                 div.className = `schedule-item ${isBreak ? 'is-break' : ''}`;
                 
-                // Highlight active
                 let sStart = parseTime(slot.start);
                 let sEnd = parseTime(slot.end);
                 if (isToday && currentMins >= sStart && currentMins < sEnd) {
@@ -735,7 +818,7 @@
                 let detailsHTML = "";
 
                 if (isBreak) {
-                    detailsHTML = `<div class="s-name" style="color:var(--warning)">${slot.name}</div>`;
+                    detailsHTML = `<div class="s-name" style="color:var(--text-muted)">${slot.name}</div>`;
                 } else {
                     let classData = timetable[dayNum][slot.id];
                     if (classData) {
@@ -757,12 +840,6 @@
         }
     };
 
-    // Keep CSS variables sync for JS
-    const style = getComputedStyle(document.body);
-    const varPrimaryLight = style.getPropertyValue('--primary-light').trim();
-    const varSecondary = style.getPropertyValue('--secondary').trim();
-    const varWarning = style.getPropertyValue('--warning').trim();
-
     // --- SNAKE GAME ENGINE ---
     const snakeGame = {
         canvas: document.getElementById('snake-canvas'),
@@ -782,7 +859,6 @@
             this.reset();
             this.draw();
             
-            // Keyboard controls
             window.addEventListener('keydown', (e) => {
                 if(!this.isPlaying) return;
                 switch(e.key) {
@@ -793,7 +869,6 @@
                 }
             });
 
-            // Swipe controls for mobile
             let touchStartX = 0; let touchStartY = 0;
             this.canvas.addEventListener('touchstart', e => {
                 touchStartX = e.changedTouches[0].screenX;
@@ -811,10 +886,8 @@
             let diffX = endX - startX;
             let diffY = endY - startY;
             if(Math.abs(diffX) > Math.abs(diffY)) {
-                // Horizontal
                 if(diffX > 0) this.setDir(1, 0); else this.setDir(-1, 0);
             } else {
-                // Vertical
                 if(diffY > 0) this.setDir(0, 1); else this.setDir(0, -1);
             }
         },
@@ -830,7 +903,7 @@
         start() {
             if (this.loop) clearInterval(this.loop);
             this.reset();
-            this.dx = 1; // start moving right
+            this.dx = 1; 
             this.isPlaying = true;
             document.getElementById('start-btn').style.display = 'none';
             this.loop = setInterval(() => this.update(), 120);
@@ -845,12 +918,12 @@
                 this.highScore = this.score;
                 localStorage.setItem('snakeHigh', this.highScore);
                 document.getElementById('high-score').innerText = this.highScore;
-                app.showToast("New High Score! 🎉");
+                app.showToast("New High Score!");
             }
         },
 
         setDir(x, y) {
-            if (this.dx === -x && this.dy === -y) return; // prevent reverse
+            if (this.dx === -x && this.dy === -y) return; 
             this.dx = x; this.dy = y;
         },
 
@@ -860,7 +933,6 @@
                 x: Math.floor(Math.random() * max),
                 y: Math.floor(Math.random() * max)
             };
-            // Prevent food on snake
             for(let segment of this.snake) {
                 if(segment.x === this.food.x && segment.y === this.food.y) this.placeFood();
             }
@@ -869,18 +941,15 @@
         update() {
             const head = {x: this.snake[0].x + this.dx, y: this.snake[0].y + this.dy};
             
-            // Wall Collision
             const max = this.canvas.width / this.gridSize;
             if (head.x < 0 || head.x >= max || head.y < 0 || head.y >= max) return this.gameOver();
             
-            // Self Collision
             for(let i=0; i<this.snake.length; i++) {
                 if(head.x === this.snake[i].x && head.y === this.snake[i].y) return this.gameOver();
             }
 
             this.snake.unshift(head);
 
-            // Eat Food
             if (head.x === this.food.x && head.y === this.food.y) {
                 this.score += 10;
                 document.getElementById('score').innerText = this.score;
@@ -895,8 +964,7 @@
         draw() {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             
-            // Draw Food (Apple)
-            this.ctx.fillStyle = '#EF4444';
+            this.ctx.fillStyle = '#d96570'; // Gemini Pink for food
             this.ctx.beginPath();
             this.ctx.arc(
                 this.food.x * this.gridSize + this.gridSize/2, 
@@ -905,15 +973,13 @@
             );
             this.ctx.fill();
 
-            // Draw Snake
             this.snake.forEach((segment, index) => {
-                this.ctx.fillStyle = index === 0 ? '#10B981' : '#34D399'; // Head is darker
+                this.ctx.fillStyle = index === 0 ? '#cfa8ff' : '#9b72cb'; // Gemini Purples for snake
                 this.ctx.fillRect(segment.x * this.gridSize, segment.y * this.gridSize, this.gridSize-1, this.gridSize-1);
             });
         }
     };
 
-    // Initialize
     app.init();
     snakeGame.init();
 
